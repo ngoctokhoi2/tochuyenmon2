@@ -1,0 +1,143 @@
+{
+  "metadata": {
+    "revision": 1,
+    "lastUpdated": "2026-09-29T02:00:00.000Z",
+    "lastUpdatedByEmail": "ngoctokhoi2@gmail.com",
+    "lastUpdatedByName": "Tổ trưởng Nguyễn Kim Ngọc",
+    "activeAccounts": [
+      {
+        "email": "ngoctokhoi2@gmail.com",
+        "name": "Tổ trưởng Nguyễn Kim Ngọc",
+        "lastSeen": "2026-09-29T02:00:00.000Z"
+      }
+    ]
+  },
+  "data": {
+    "settings": {
+      "headerTitle": "UBND Xã Mỹ Lạc – Trường Tiểu Học Mỹ Lạc – Tổ Khối 2",
+      "schoolName": "TRƯỜNG TIỂU HỌC MỸ LẠC",
+      "teamName": "TỔ CHUYÊN MÔN KHỐI 2",
+      "academicYear": "NĂM HỌC 2026-2027",
+      "communeName": "UBND XÃ MỸ LẠC",
+      "secretPasswordLeader": "Tt112233"
+    },
+    "leader_pass": "Tt112233",
+    "members": [
+      {
+        "id": "gv-1",
+        "stt": 1,
+        "name": "Lê Thị Hồng",
+        "birthDate": "1976",
+        "isPartyMember": false,
+        "campus": "Trường chính",
+        "assignedClass": "Lớp 2/1",
+        "totalStudents": 32,
+        "femaleStudents": 15,
+        "yearJoined": 1998,
+        "isLeader": false,
+        "phone": "0912 345 201",
+        "email": "thihong.thmylac@gmail.com"
+      },
+      {
+        "id": "gv-2",
+        "stt": 2,
+        "name": "Nguyễn Thị Kim Ngọc",
+        "birthDate": "1980",
+        "isPartyMember": true,
+        "campus": "Trường chính",
+        "assignedClass": "Tổ trưởng Chuyên môn Khối 2",
+        "totalStudents": 31,
+        "femaleStudents": 16,
+        "yearJoined": 2002,
+        "isLeader": true,
+        "phone": "0912 345 202",
+        "email": "ngoctokhoi2@gmail.com"
+      },
+      {
+        "id": "gv-3",
+        "stt": 3,
+        "name": "Lê Thị Hồng Thắm",
+        "birthDate": "1974",
+        "isPartyMember": true,
+        "campus": "Trường chính",
+        "assignedClass": "Lớp 2/3",
+        "totalStudents": 30,
+        "femaleStudents": 14,
+        "yearJoined": 1996,
+        "isLeader": false,
+        "phone": "0912 345 203",
+        "email": "hongtham.thmylac@gmail.com"
+      },
+      {
+        "id": "gv-4",
+        "stt": 4,
+        "name": "Hồ Thị Phương Trúc",
+        "birthDate": "1995",
+        "isPartyMember": false,
+        "campus": "Trường chính",
+        "assignedClass": "Lớp 2/4",
+        "totalStudents": 32,
+        "femaleStudents": 17,
+        "yearJoined": 2018,
+        "isLeader": false,
+        "phone": "0912 345 204",
+        "email": "phuongtruc.thmylac@gmail.com"
+      },
+      {
+        "id": "gv-5",
+        "stt": 5,
+        "name": "Nguyễn Văn Toản",
+        "birthDate": "1986",
+        "isPartyMember": false,
+        "campus": "Trường chính",
+        "assignedClass": "Dạy GDTC",
+        "totalStudents": 0,
+        "femaleStudents": 0,
+        "yearJoined": 2010,
+        "isLeader": false,
+        "phone": "0912 345 205",
+        "email": "vantoan.thmylac@gmail.com"
+      },
+      {
+        "id": "gv-6",
+        "stt": 6,
+        "name": "Bùi An Bình",
+        "birthDate": "1986",
+        "isPartyMember": false,
+        "campus": "Trường chính",
+        "assignedClass": "Dạy GDTC",
+        "totalStudents": 0,
+        "femaleStudents": 0,
+        "yearJoined": 2011,
+        "isLeader": false,
+        "phone": "0912 345 206",
+        "email": "anbinh.thmylac@gmail.com"
+      },
+      {
+        "id": "gv-7",
+        "stt": 7,
+        "name": "Lê Thị Ngọc Thùy",
+        "birthDate": "1972",
+        "isPartyMember": true,
+        "campus": "Trường chính",
+        "assignedClass": "Thư viện - Thiết bị",
+        "totalStudents": 0,
+        "femaleStudents": 0,
+        "yearJoined": 1995,
+        "isLeader": false,
+        "phone": "0912 345 207",
+        "email": "ngocthuy.thmylac@gmail.com"
+      }
+    ],
+    "reports": [],
+    "struggling": [],
+    "team_docs": [],
+    "exams": [],
+    "lesson_studies": [],
+    "directives": [],
+    "meetings": [],
+    "emulations": [],
+    "emulation_docs": [],
+    "timetables": []
+  }
+}

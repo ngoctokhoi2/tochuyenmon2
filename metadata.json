@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix  Tổ Khối 5",
+  "description": "Ứng dụng Quản lý Chuyên môn Tổ Khối 5 - Trường Tiểu Học Tân Thạnh: Báo cáo sĩ số học sinh, theo dõi học sinh cần giúp đỡ, kế hoạch dạy học, ngân hàng đề thi bảo mật, sinh hoạt chuyên môn KHBD, công văn chỉ đạo và xét thi đua.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "entities": {
+    "MonthlyReport": {
+      "title": "MonthlyReport",
+      "description": "Báo cáo số liệu hàng tháng của giáo viên chủ nhiệm từng lớp",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "month": { "type": "string" },
+        "className": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "totalStudents": { "type": "number" },
+        "femaleStudents": { "type": "number" },
+        "ethnicStudents": { "type": "number" },
+        "poorStudents": { "type": "number" },
+        "nearPoorStudents": { "type": "number" },
+        "disabledStudents": { "type": "number" },
+        "disabledStudentNames": { "type": "string" },
+        "absentWithPermission": { "type": "number" },
+        "absentWithoutPermission": { "type": "number" },
+        "status": { "type": "string" },
+        "submittedAt": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "month", "className", "teacherName", "status"]
+    },
+    "StrugglingStudent": {
+      "title": "StrugglingStudent",
+      "description": "Hồ sơ học sinh cần hỗ trợ và rèn luyện bổ sung",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "className": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "strugglingSubject": { "type": "string" },
+        "currentDeficiency": { "type": "string" },
+        "supportPlan": { "type": "string" },
+        "progressStatus": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "name", "className", "progressStatus"]
+    },
+    "TeamPlanDocument": {
+      "title": "TeamPlanDocument",
+      "description": "Kế hoạch khối, công văn và biên bản chuyên môn",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "uploadedBy": { "type": "string" },
+        "uploadedAt": { "type": "string" },
+        "fileSize": { "type": "string" },
+        "fileData": { "type": "string" }
+      },
+      "required": ["id", "title", "category"]
+    },
+    "ExamAndLessonPlan": {
+      "title": "ExamAndLessonPlan",
+      "description": "Ngân hàng đề kiểm tra định kỳ và kế hoạch dạy học",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "subject": { "type": "string" },
+        "className": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "status": { "type": "string" },
+        "submittedAt": { "type": "string" },
+        "reviewNote": { "type": "string" },
+        "reviewedAt": { "type": "string" }
+      },
+      "required": ["id", "title", "subject", "teacherName", "status"]
+    },
+    "LessonStudyTopic": {
+      "title": "LessonStudyTopic",
+      "description": "Chủ đề sinh hoạt chuyên môn theo nghiên cứu bài học",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "subject": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "className": { "type": "string" },
+        "status": { "type": "string" },
+        "date": { "type": "string" }
+      },
+      "required": ["id", "title", "subject", "teacherName"]
+    },
+    "SchoolDirective": {
+      "title": "SchoolDirective",
+      "description": "Chỉ đạo điều hành từ BGH nhà trường và Phòng GD&ĐT",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "code": { "type": "string" },
+        "issuedDate": { "type": "string" },
+        "source": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "title", "status"]
+    },
+    "MeetingNotice": {
+      "title": "MeetingNotice",
+      "description": "Lịch họp tổ chuyên môn và thông báo sinh hoạt khối",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "meetingDate": { "type": "string" },
+        "location": { "type": "string" },
+        "chairedBy": { "type": "string" }
+      },
+      "required": ["id", "title", "meetingDate"]
+    },
+    "EmulationRecord": {
+      "title": "EmulationRecord",
+      "description": "Hồ sơ theo dõi thi đua nền nếp và chuyên môn khối",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "className": { "type": "string" },
+        "month": { "type": "string" },
+        "score": { "type": "number" },
+        "ranking": { "type": "string" }
+      },
+      "required": ["id", "teacherName", "className", "month"]
+    },
+    "ClassTimetable": {
+      "title": "ClassTimetable",
+      "description": "Thời khóa biểu các lớp 5 của Trường Tiểu học Tân Thành",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "className": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "campus": { "type": "string" },
+        "effectiveTerm": { "type": "string" }
+      },
+      "required": ["id", "className", "teacherName"]
+    },
+    "AppState": {
+      "title": "AppState",
+      "description": "Trạng thái và cấu hình chung của toàn bộ ứng dụng Khối 5",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "lastUpdated": { "type": "string" },
+        "lastUpdatedByEmail": { "type": "string" },
+        "lastUpdatedByName": { "type": "string" },
+        "revision": { "type": "number" }
+      },
+      "required": ["id", "lastUpdated"]
+    }
+  },
+  "firestore": {
+    "/reports/{reportId}": {
+      "schema": "MonthlyReport",
+      "description": "Báo cáo số liệu học sinh hàng tháng của các lớp khối 5"
+    },
+    "/struggling/{studentId}": {
+      "schema": "StrugglingStudent",
+      "description": "Danh sách và kế hoạch bồi dưỡng học sinh chậm tiến bộ"
+    },
+    "/team_docs/{docId}": {
+      "schema": "TeamPlanDocument",
+      "description": "Kế hoạch khối và văn bản chuyên môn"
+    },
+    "/exams/{examId}": {
+      "schema": "ExamAndLessonPlan",
+      "description": "Ngân hàng đề thi và giáo án"
+    },
+    "/lesson_studies/{topicId}": {
+      "schema": "LessonStudyTopic",
+      "description": "Sinh hoạt chuyên môn theo nghiên cứu bài học"
+    },
+    "/directives/{directiveId}": {
+      "schema": "SchoolDirective",
+      "description": "Công văn chỉ đạo của BGH và các cấp"
+    },
+    "/meetings/{meetingId}": {
+      "schema": "MeetingNotice",
+      "description": "Lịch họp và thông báo tổ chuyên môn"
+    },
+    "/emulations/{recordId}": {
+      "schema": "EmulationRecord",
+      "description": "Bảng theo dõi thi đua các lớp"
+    },
+    "/timetables/{timetableId}": {
+      "schema": "ClassTimetable",
+      "description": "Thời khóa biểu phân công giảng dạy"
+    },
+    "/app_state/{stateId}": {
+      "schema": "AppState",
+      "description": "Trạng thái đồng bộ toàn khối"
+    }
+  }
+}
