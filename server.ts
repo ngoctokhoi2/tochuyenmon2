@@ -468,13 +468,19 @@ async function startServer() {
 
   // Root redirect & backwards compatibility
   app.get('/', (_req, res) => {
-    res.redirect('/to2/');
+    res.redirect('/tochuyenmon2/');
+  });
+  app.get('/to2', (_req, res) => {
+    res.redirect('/tochuyenmon2/');
+  });
+  app.get('/to2/*', (_req, res) => {
+    res.redirect('/tochuyenmon2/');
   });
   app.get('/to5', (_req, res) => {
-    res.redirect('/to2/');
+    res.redirect('/tochuyenmon2/');
   });
   app.get('/to5/*', (_req, res) => {
-    res.redirect('/to2/');
+    res.redirect('/tochuyenmon2/');
   });
 
   // Vite integration
@@ -488,6 +494,7 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.resolve(__dirname, 'dist');
+    app.use('/tochuyenmon2', express.static(distPath));
     app.use('/to2', express.static(distPath));
     app.use('/to5', express.static(distPath));
     app.use(express.static(distPath));

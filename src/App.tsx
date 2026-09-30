@@ -58,6 +58,7 @@ import { testFirestoreConnection } from './firebase/config';
 
 import {
   subscribeToAllFirestoreData,
+  fetchAllReportsFromFirestore,
   saveReportToFirestore,
   deleteReportFromFirestore,
   saveStudentToFirestore,
@@ -503,7 +504,13 @@ export default function App() {
 
     if (sData.reports && Array.isArray(sData.reports) && sData.reports.length > 0) {
       const sanitized = sData.reports.map((r: MonthlyReport) => sanitizeMonthlyReport(r, activeMembers));
-      setReports(prev => JSON.stringify(prev) === JSON.stringify(sanitized) ? prev : sanitized);
+      setReports(prev => {
+        const reportMap = new Map<string, MonthlyReport>();
+        prev.forEach(r => reportMap.set(r.id, r));
+        sanitized.forEach(r => reportMap.set(r.id, r));
+        const merged = Array.from(reportMap.values());
+        return JSON.stringify(prev) === JSON.stringify(merged) ? prev : merged;
+      });
     }
     if (sData.struggling && Array.isArray(sData.struggling)) {
       setStrugglingStudents(prev => JSON.stringify(prev) === JSON.stringify(sData.struggling) ? prev : sData.struggling);
@@ -548,6 +555,19 @@ export default function App() {
   const handlePullOnlineUpdates = useCallback(async (isSilent = false) => {
     if (!isSilent) setIsSyncing(true);
     try {
+      // 1. Fetch latest reports directly from cloud Firestore (bridges preview and dev apps instantly)
+      const fsReports = await fetchAllReportsFromFirestore();
+      if (fsReports && fsReports.length > 0) {
+        const sanitized = fsReports.map(r => sanitizeMonthlyReport(r, membersRef.current));
+        setReports(prev => {
+          const reportMap = new Map<string, MonthlyReport>();
+          prev.forEach(r => reportMap.set(r.id, r));
+          sanitized.forEach(r => reportMap.set(r.id, r));
+          return Array.from(reportMap.values());
+        });
+      }
+
+      // 2. Pull from local server
       const res = await pullDataFromOnlineServer(userEmailRef.current, currentUserRef.current.name);
       setIsOnline(true);
       if (res.data && Object.keys(res.data).length > 0) {
@@ -648,10 +668,16 @@ export default function App() {
 
     const unsubscribeFirestore = subscribeToAllFirestoreData({
       onReportsUpdate: (firestoreReports) => {
-        if (Array.isArray(firestoreReports)) {
+        if (Array.isArray(firestoreReports) && firestoreReports.length > 0) {
           markRemoteUpdate();
           const sanitized = firestoreReports.map(r => sanitizeMonthlyReport(r, membersRef.current));
-          setReports(prev => JSON.stringify(prev) === JSON.stringify(sanitized) ? prev : sanitized);
+          setReports(prev => {
+            const reportMap = new Map<string, MonthlyReport>();
+            prev.forEach(r => reportMap.set(r.id, r));
+            sanitized.forEach(r => reportMap.set(r.id, r));
+            const merged = Array.from(reportMap.values());
+            return JSON.stringify(prev) === JSON.stringify(merged) ? prev : merged;
+          });
           setIsOnline(true);
         }
       },
@@ -1317,6 +1343,7 @@ export default function App() {
             isHostServer={isHostServerDevice(userEmail)}
             onSaveReport={handleSaveReport}
             onDeleteReport={handleDeleteReport}
+            onRefreshReports={() => handlePullOnlineUpdates(false)}
           />
         )}
 

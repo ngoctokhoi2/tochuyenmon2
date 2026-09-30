@@ -16,7 +16,8 @@ import {
   ShieldCheck,
   Server,
   Globe,
-  Cloud
+  Cloud,
+  RefreshCw
 } from 'lucide-react';
 import { DeleteConfirmModal } from './DeleteConfirmModal';
 import { FileUploadInput } from './FileUploadInput';
@@ -32,9 +33,11 @@ interface MonthlyReportViewProps {
   isHostServer?: boolean;
   onSaveReport: (report: MonthlyReport) => void;
   onDeleteReport: (reportId: string) => void;
+  onRefreshReports?: () => Promise<void> | void;
 }
 
-const MONTHS = [
+const MONTH_OPTIONS = [
+  'Tất cả các tháng',
   'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12',
   'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5'
 ];
@@ -47,13 +50,15 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
   isOnline = true,
   isHostServer: propIsHostServer,
   onSaveReport,
-  onDeleteReport
+  onDeleteReport,
+  onRefreshReports
 }) => {
   const isHostServer = typeof propIsHostServer === 'boolean'
     ? propIsHostServer
     : isHostServerDevice(userEmail);
   const leaderName = members.find(m => m.isLeader)?.name || 'Nguyễn Kim Ngọc';
   const [selectedMonth, setSelectedMonth] = useState<string>('Tháng 9');
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [editingReport, setEditingReport] = useState<MonthlyReport | null>(null);
   const [deletingReport, setDeletingReport] = useState<MonthlyReport | null>(null);
@@ -105,8 +110,13 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
     attachedFileDataUrl: undefined
   });
 
-  // Filter reports by selected month
-  const currentMonthReports = reports.filter(r => r.month === selectedMonth);
+  // Filter reports by selected month (or show all months)
+  const currentMonthReports = selectedMonth === 'Tất cả các tháng'
+    ? reports
+    : reports.filter(r => r.month === selectedMonth);
+
+  // List of reports waiting for approval from client machines
+  const pendingReports = reports.filter(r => r.status !== 'Đã duyệt');
 
   // Aggregated totals for the selected month
   const totalStudents = currentMonthReports.reduce((sum, r) => sum + r.totalStudents, 0);
@@ -302,6 +312,61 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
         </div>
       </div>
 
+      {/* Khung Thông Báo Báo Cáo Chờ Duyệt Từ Máy Lẻ */}
+      {pendingReports.length > 0 && (
+        <div className="bg-amber-50 border-2 border-amber-400 p-4 rounded-2xl shadow-sm space-y-2.5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+              </span>
+              <h4 className="font-extrabold text-sm text-amber-950 flex items-center gap-1.5">
+                <span>🔔 Có {pendingReports.length} báo cáo từ máy lẻ gửi về đang chờ Máy chủ duyệt:</span>
+              </h4>
+            </div>
+            <div className="flex items-center gap-2 text-xs">
+              <button
+                type="button"
+                onClick={() => setSelectedMonth('Tất cả các tháng')}
+                className="text-amber-900 underline font-semibold hover:text-amber-950"
+              >
+                Xem tất cả báo cáo
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2 pt-1">
+            {pendingReports.map(rep => (
+              <div key={rep.id} className="bg-white border border-amber-300 rounded-xl px-3 py-2 text-xs flex items-center flex-wrap gap-2 shadow-2xs">
+                <span className="font-bold text-blue-700">{rep.className}</span>
+                <span className="text-slate-600 font-medium">{rep.teacherName}</span>
+                <span className="bg-amber-100 text-amber-900 font-bold px-1.5 py-0.5 rounded text-[10px]">{rep.month}</span>
+                <span className="text-slate-500">Sĩ số: <strong className="text-slate-800">{rep.totalStudents}</strong></span>
+                <span className="text-slate-400 font-mono text-[10px]">({rep.submittedAt})</span>
+                {isHostServer && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSaveReport({
+                        ...rep,
+                        status: 'Đã duyệt',
+                        reviewedBy: `Tổ trưởng ${leaderName}`,
+                        reviewedAt: new Date().toLocaleDateString('vi-VN')
+                      });
+                    }}
+                    className="ml-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-2.5 py-1 rounded-lg shadow-2xs transition-colors inline-flex items-center gap-1"
+                    title="Máy chủ Tổ trưởng phê duyệt ngay báo cáo này"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>Duyệt ngay</span>
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Top Action & Month Selector Bar */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl shadow-xs border border-slate-200">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -320,13 +385,29 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            {onRefreshReports && (
+              <button
+                type="button"
+                onClick={async () => {
+                  setIsRefreshing(true);
+                  await onRefreshReports();
+                  setTimeout(() => setIsRefreshing(false), 800);
+                }}
+                disabled={isRefreshing}
+                className="bg-indigo-700 hover:bg-indigo-800 text-white font-bold px-3.5 py-2 rounded-xl text-sm flex items-center gap-1.5 shadow-xs transition-colors shrink-0"
+                title="Bấm để đồng bộ và nhận ngay các báo cáo vừa gửi từ máy lẻ giáo viên"
+              >
+                <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <span>Nhận Báo Cáo Từ Máy Lẻ</span>
+              </button>
+            )}
             <button
               type="button"
               onClick={() => handleOpenAdd()}
               className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl text-sm flex items-center gap-2 shadow-xs transition-colors"
             >
               <PlusCircle className="w-4 h-4" />
-              <span>Nộp / Cập nhật báo cáo {selectedMonth}</span>
+              <span>Nộp / Cập nhật báo cáo {selectedMonth === 'Tất cả các tháng' ? 'Tháng 9' : selectedMonth}</span>
             </button>
             <button
               type="button"
@@ -379,20 +460,40 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
           <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-2 shrink-0">
             Chọn tháng:
           </span>
-          {MONTHS.map(m => (
-            <button
-              key={m}
-              type="button"
-              onClick={() => setSelectedMonth(m)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 ${
-                selectedMonth === m
-                  ? 'bg-blue-600 text-white shadow-xs font-bold'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              {m}
-            </button>
-          ))}
+          {MONTH_OPTIONS.map(m => {
+            const count = m === 'Tất cả các tháng' 
+              ? reports.length 
+              : reports.filter(r => r.month === m).length;
+            const pendingCount = m === 'Tất cả các tháng'
+              ? reports.filter(r => r.status !== 'Đã duyệt').length
+              : reports.filter(r => r.month === m && r.status !== 'Đã duyệt').length;
+
+            return (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setSelectedMonth(m)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 flex items-center gap-1.5 ${
+                  selectedMonth === m
+                    ? 'bg-blue-600 text-white shadow-xs font-bold'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                <span>{m}</span>
+                {count > 0 && (
+                  <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-extrabold ${
+                    selectedMonth === m
+                      ? 'bg-white/20 text-white'
+                      : pendingCount > 0
+                      ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                      : 'bg-slate-200 text-slate-700'
+                  }`}>
+                    {count} {pendingCount > 0 ? `(${pendingCount} chờ)` : ''}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -403,7 +504,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
           <div className="text-2xl font-black text-slate-800 mt-1 flex items-baseline gap-2">
             {totalStudents}
             <span className="text-xs text-blue-600 font-semibold">
-              ({currentMonthReports.length}/{members.filter(m => m.assignedClass.startsWith('5')).length} lớp)
+              ({currentMonthReports.length}/{homeroomTeachers.length} lớp)
             </span>
           </div>
         </div>

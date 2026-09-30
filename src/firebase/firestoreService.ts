@@ -318,8 +318,22 @@ export function sanitizeForFirestore<T>(data: T): T {
 // Single-item Firestore write helpers with instant cloud propagation
 export async function saveReportToFirestore(report: MonthlyReport, userEmail: string, userName: string): Promise<void> {
   const cleanData = sanitizeForFirestore(report);
+  // Protect against Firestore document size limit if user uploaded large attachment
+  if (cleanData.attachedFileDataUrl && cleanData.attachedFileDataUrl.length > 600000) {
+    cleanData.attachedFileDataUrl = '';
+  }
   await setDoc(doc(db, 'reports', report.id), cleanData, { merge: true });
   await recordFirestoreActivity(userEmail, userName);
+}
+
+export async function fetchAllReportsFromFirestore(): Promise<MonthlyReport[]> {
+  try {
+    const snap = await getDocs(collection(db, 'reports'));
+    return snap.docs.map(d => d.data() as MonthlyReport);
+  } catch (err) {
+    console.warn('[Firestore] fetchAllReportsFromFirestore error:', err);
+    return [];
+  }
 }
 
 export async function deleteReportFromFirestore(reportId: string, userEmail: string, userName: string): Promise<void> {
