@@ -103,6 +103,16 @@ import { PromptModal } from './components/PromptModal';
 import { BackupRestoreModal } from './components/BackupRestoreModal';
 
 // Sanitizer to guarantee data consistency and correct role assignment for Khối 2
+export const filterKhối2Timetables = (list: ClassTimetable[]): ClassTimetable[] => {
+  if (!Array.isArray(list)) return [];
+  return list.filter(t => {
+    if (!t) return false;
+    if (['Kiến Bình', 'Tân Bình', 'Trương Hoàng', 'Đặng Văn Phấn'].includes(t.campus)) return false;
+    if (t.className && (t.className.startsWith('5/') || t.className.startsWith('Lớp 5'))) return false;
+    return true;
+  });
+};
+
 export const sanitizeMonthlyReport = (
   r: MonthlyReport, 
   allMembers: TeacherMember[]
@@ -241,10 +251,16 @@ export default function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Timetables (Thời khóa biểu - only shows when teachers upload)
+  // Timetables (Thời khóa biểu - only shows when teachers of Khối 2 upload)
   const [timetables, setTimetables] = useState<ClassTimetable[]>(() => {
-    const saved = localStorage.getItem('mylac_k2_timetables') || localStorage.getItem('tanthanh_k5_timetables');
-    return saved ? JSON.parse(saved) : INITIAL_TIMETABLES;
+    try {
+      localStorage.removeItem('tanthanh_k5_timetables');
+      localStorage.removeItem('mylac_k2_timetables');
+      const saved = localStorage.getItem('mythanh_k2_timetables');
+      return saved ? filterKhối2Timetables(JSON.parse(saved)) : INITIAL_TIMETABLES;
+    } catch {
+      return INITIAL_TIMETABLES;
+    }
   });
 
   // Modals state
@@ -322,7 +338,7 @@ export default function App() {
       if (savedMeetings) setMeetings(savedMeetings);
       if (savedEmulations) setEmulations(savedEmulations);
       if (savedEmuDocs) setEmulationDocuments(savedEmuDocs);
-      if (savedTimetables) setTimetables(savedTimetables);
+      if (savedTimetables) setTimetables(filterKhối2Timetables(savedTimetables));
     } catch (err) {
       console.warn('Error loading from persistent storage, using current memory state', err);
     }
@@ -424,7 +440,7 @@ export default function App() {
   }, [emulationDocuments]);
 
   useEffect(() => {
-    localStorage.setItem('mylac_k2_timetables', JSON.stringify(timetables));
+    localStorage.setItem('mythanh_k2_timetables', JSON.stringify(timetables));
     savePersistentData('timetables', timetables);
   }, [timetables]);
 
@@ -537,7 +553,8 @@ export default function App() {
       setEmulationDocuments(prev => JSON.stringify(prev) === JSON.stringify(sData.emulation_docs) ? prev : sData.emulation_docs);
     }
     if (sData.timetables && Array.isArray(sData.timetables)) {
-      setTimetables(prev => JSON.stringify(prev) === JSON.stringify(sData.timetables) ? prev : sData.timetables);
+      const cleanList = filterKhối2Timetables(sData.timetables);
+      setTimetables(prev => JSON.stringify(prev) === JSON.stringify(cleanList) ? prev : cleanList);
     }
 
     const nowStr = new Date().toLocaleTimeString('vi-VN');
@@ -733,7 +750,8 @@ export default function App() {
       onTimetablesUpdate: (firestoreTimetables) => {
         if (Array.isArray(firestoreTimetables)) {
           markRemoteUpdate();
-          setTimetables(prev => JSON.stringify(prev) === JSON.stringify(firestoreTimetables) ? prev : firestoreTimetables);
+          const cleanList = filterKhối2Timetables(firestoreTimetables);
+          setTimetables(prev => JSON.stringify(prev) === JSON.stringify(cleanList) ? prev : cleanList);
         }
       },
       onSettingsUpdate: (firestoreSettings) => {

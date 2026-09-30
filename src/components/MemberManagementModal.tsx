@@ -241,11 +241,7 @@ export const MemberManagementModal: React.FC<MemberManagementModalProps> = ({
                       onChange={(e) => setNewMember({ ...newMember, campus: e.target.value })}
                       className="border border-slate-300 rounded p-1.5 bg-white"
                     >
-                      <option value="Trường chính">Trường chính</option>
-                      <option value="Kiến Bình">Kiến Bình</option>
-                      <option value="Tân Bình">Tân Bình</option>
-                      <option value="Tân Hòa">Tân Hòa</option>
-                      <option value="Đinh Văn Phu">Đinh Văn Phu</option>
+                      <option value="Trường chính">Trường chính (TH Mỹ Thạnh)</option>
                     </select>
                     <input
                       type="text"
@@ -350,10 +346,6 @@ export const MemberManagementModal: React.FC<MemberManagementModalProps> = ({
                             className="text-slate-700 bg-transparent border-b border-transparent hover:border-slate-300 outline-none"
                           >
                             <option value="Trường chính">Trường chính</option>
-                            <option value="Kiến Bình">Kiến Bình</option>
-                            <option value="Tân Bình">Tân Bình</option>
-                            <option value="Tân Hòa">Tân Hòa</option>
-                            <option value="Đinh Văn Phu">Đinh Văn Phu</option>
                           </select>
                         </td>
                         <td className="py-2 px-2">

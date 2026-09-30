@@ -4,8 +4,8 @@ export interface TeacherMember {
   name: string;
   birthDate: string;
   isPartyMember: boolean; // Đảng viên
-  campus: string; // Trường chính / Kiến Bình / Tân Bình / Tân Hòa / Đinh Văn Phu
-  assignedClass: string; // 5A1(ĐC), 5A(KB), ... hoặc GV Chuyên trách
+  campus: string; // Trường chính (Trường TH Mỹ Thạnh)
+  assignedClass: string; // Lớp 2/1, Lớp 2/2, Lớp 2/3, Lớp 2/4 hoặc GV Chuyên trách Khối 2
   totalStudents: number;
   femaleStudents: number;
   yearJoined: number;

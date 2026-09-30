@@ -97,7 +97,7 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
 }) => {
   const leaderName = members.find(m => m.isLeader)?.name || 'Nguyễn Kim Ngọc';
   const [viewMode, setViewMode] = useState<'grid' | 'cards'>('grid');
-  const [selectedCampus, setSelectedCampus] = useState<string>('Tất cả');
+  const [selectedClassFilter, setSelectedClassFilter] = useState<string>('Tất cả');
   const [selectedClassId, setSelectedClassId] = useState<string>(timetables[0]?.id || '');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -124,7 +124,7 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
     teacherId: currentUser.id,
     teacherName: currentUser.name,
     className: currentUser.assignedClass.replace(/\(ĐC\)|\(KB\)|\(TB\)|\(TH\)| - Tổ trưởng/g, '').trim() || 'Lớp 2/1',
-    campus: currentUser.campus,
+    campus: 'Trường chính',
     effectiveTerm: 'Học kỳ I (Áp dụng từ Tuần 1)',
     effectiveDate: '05/09/2026',
     note: 'Tệp văn bản Word thời khóa biểu chi tiết do giáo viên bộ môn / chủ nhiệm biên soạn gửi lên.',
@@ -152,11 +152,11 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
     teacherId: currentUser.id,
     teacherName: currentUser.name,
     className: currentUser.assignedClass.replace(/\(ĐC\)|\(KB\)|\(TB\)|\(TH\)| - Tổ trưởng/g, '').trim() || 'Lớp 2/1',
-    campus: currentUser.campus,
+    campus: 'Trường chính',
     effectiveTerm: 'Học kỳ I (Áp dụng từ Tuần 1)',
     effectiveDate: '05/09/2026',
     note: 'Học 2 buổi/ngày: Sáng 4 tiết, Chiều 3 tiết. Đảm bảo đúng định mức chương trình GDPT 2018.',
-    scheduleGrid: { ...STANDARD_TIMETABLE_GRID },
+    scheduleGrid: {},
     attachedFileName: '',
     attachedFileSize: '',
     attachedFileDataUrl: undefined
@@ -165,14 +165,20 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
   // Approval Form State
   const [approvalFeedback, setApprovalFeedback] = useState<string>('');
 
-  // Filtered timetables
+  // Filtered timetables (strictly Khối 2 timetables submitted by teachers)
   const filteredTimetables = timetables.filter(item => {
-    const matchesCampus = selectedCampus === 'Tất cả' || item.campus === selectedCampus;
+    // Strictly filter out any old mock campuses or mock Grade 5
+    if (['Kiến Bình', 'Tân Bình', 'Trương Hoàng', 'Đặng Văn Phấn'].includes(item.campus)) return false;
+    if (item.className && (item.className.startsWith('5/') || item.className.startsWith('Lớp 5'))) return false;
+
+    const matchesClass = selectedClassFilter === 'Tất cả' ||
+      (selectedClassFilter === 'Môn chuyên'
+        ? (!item.className.includes('2/1') && !item.className.includes('2/2') && !item.className.includes('2/3') && !item.className.includes('2/4'))
+        : item.className.includes(selectedClassFilter));
     const matchesSearch = 
       item.className.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.teacherName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.campus.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCampus && matchesSearch;
+      item.teacherName.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesClass && matchesSearch;
   });
 
   // Active timetable being viewed in Grid mode
@@ -381,10 +387,10 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
             <p className="font-bold text-xs uppercase">UBND XÃ MỸ THẠNH - TRƯỜNG TIỂU HỌC MỸ THẠNH</p>
             <p className="font-bold text-xs uppercase">TỔ CHUYÊN MÔN KHỐI 2</p>
             <h1 className="font-black text-xl uppercase tracking-wide pt-2">
-              THỜI KHÓA BIỂU LỚP {currentTimetable.className.toUpperCase()}
+              THỜI KHÓA BIỂU {currentTimetable.className.toUpperCase().startsWith('LỚP') ? currentTimetable.className.toUpperCase() : `LỚP ${currentTimetable.className.toUpperCase()}`}
             </h1>
             <p className="text-xs italic">
-              (Năm học 2026 - 2027 • Điểm trường: {currentTimetable.campus} • {currentTimetable.effectiveTerm})
+              (Năm học 2026 - 2027 • Trường Tiểu học Mỹ Thạnh • {currentTimetable.effectiveTerm})
             </p>
             <p className="text-xs">
               Giáo viên chủ nhiệm: <strong>{currentTimetable.teacherName}</strong> — Ngày áp dụng: {currentTimetable.effectiveDate}
@@ -475,7 +481,7 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Giáo viên gửi thời khóa biểu lớp đang dạy theo phân hiệu trường. Tổ trưởng xem xét, duyệt áp dụng và in lưu hồ sơ chuyên môn.
+              Chỉ ghi nhận thời khóa biểu do giáo viên Khối 2 gửi lên (tệp Word .docx, .doc). Đã xóa toàn bộ TKB mẫu và các điểm trường cũ.
             </p>
           </div>
 
@@ -522,24 +528,24 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
 
         {/* Filter Controls & View Switcher */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-4 mt-4 border-t border-slate-100">
-          {/* Campuses Filter */}
+          {/* Lớp Khối 2 Filter */}
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
             <span className="text-xs font-bold text-slate-600 mr-1 flex items-center gap-1">
-              <Building2 className="w-3.5 h-3.5 text-slate-400" />
-              Điểm:
+              <Calendar className="w-3.5 h-3.5 text-slate-400" />
+              Lớp Khối 2:
             </span>
-            {['Tất cả', 'Trường chính', 'Kiến Bình', 'Tân Bình', 'Trương Hoàng', 'Đặng Văn Phấn'].map(campus => (
+            {['Tất cả', 'Lớp 2/1', 'Lớp 2/2', 'Lớp 2/3', 'Lớp 2/4', 'Môn chuyên'].map(cls => (
               <button
-                key={campus}
+                key={cls}
                 type="button"
-                onClick={() => setSelectedCampus(campus)}
+                onClick={() => setSelectedClassFilter(cls)}
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
-                  selectedCampus === campus
-                    ? 'bg-teal-600 text-white shadow-2xs'
+                  selectedClassFilter === cls
+                    ? 'bg-teal-600 text-white shadow-2xs font-bold'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
-                {campus}
+                {cls}
               </button>
             ))}
           </div>
@@ -1107,7 +1113,7 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
                   >
                     {members.map(m => (
                       <option key={m.id} value={m.id}>
-                        {m.name} ({m.campus})
+                        {m.name} {m.assignedClass ? `(${m.assignedClass})` : ''}
                       </option>
                     ))}
                   </select>
@@ -1115,33 +1121,35 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Lớp đang dạy *
+                    Lớp Khối 2 *
                   </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="VD: Lớp 2/1, 2/2, 2/3, 2/4..."
+                  <select
                     value={formState.className}
                     onChange={(e) => setFormState({ ...formState, className: e.target.value })}
                     className="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white focus:ring-2 focus:ring-teal-500 font-bold text-slate-800"
-                  />
+                  >
+                    <option value="Lớp 2/1">Lớp 2/1</option>
+                    <option value="Lớp 2/2">Lớp 2/2</option>
+                    <option value="Lớp 2/3">Lớp 2/3</option>
+                    <option value="Lớp 2/4">Lớp 2/4</option>
+                    <option value="Môn GDTC">Môn GDTC</option>
+                    <option value="Môn Tiếng Anh">Môn Tiếng Anh</option>
+                    <option value="Môn Tin học">Môn Tin học</option>
+                    <option value="Môn Mĩ thuật">Môn Mĩ thuật</option>
+                    <option value="Môn Âm nhạc">Môn Âm nhạc</option>
+                  </select>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Điểm trường *
+                    Trường *
                   </label>
-                  <select
-                    value={formState.campus}
-                    onChange={(e) => setFormState({ ...formState, campus: e.target.value })}
-                    className="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white focus:ring-2 focus:ring-teal-500"
-                  >
-                    <option value="Trường chính">Trường chính</option>
-                    <option value="Kiến Bình">Kiến Bình</option>
-                    <option value="Tân Bình">Tân Bình</option>
-                    <option value="Trương Hoàng">Trương Hoàng</option>
-                    <option value="Đặng Văn Phấn">Đặng Văn Phấn</option>
-                  </select>
+                  <input
+                    type="text"
+                    disabled
+                    value="Trường Tiểu học Mỹ Thạnh"
+                    className="w-full border border-slate-200 rounded-lg p-2 text-xs bg-slate-100 text-slate-700 font-semibold"
+                  />
                 </div>
 
                 <div>
@@ -1398,7 +1406,7 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
                   >
                     {members.map(m => (
                       <option key={m.id} value={m.id}>
-                        {m.name} ({m.campus})
+                        {m.name} {m.assignedClass ? `(${m.assignedClass})` : ''}
                       </option>
                     ))}
                   </select>
@@ -1406,33 +1414,35 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Lớp dạy *
+                    Lớp Khối 2 *
                   </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="VD: Lớp 2/1, 2/2, 2/3, 2/4..."
+                  <select
                     value={quickForm.className}
                     onChange={(e) => setQuickForm({ ...quickForm, className: e.target.value })}
                     className="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white focus:ring-2 focus:ring-teal-500 font-bold"
-                  />
+                  >
+                    <option value="Lớp 2/1">Lớp 2/1</option>
+                    <option value="Lớp 2/2">Lớp 2/2</option>
+                    <option value="Lớp 2/3">Lớp 2/3</option>
+                    <option value="Lớp 2/4">Lớp 2/4</option>
+                    <option value="Môn GDTC">Môn GDTC</option>
+                    <option value="Môn Tiếng Anh">Môn Tiếng Anh</option>
+                    <option value="Môn Tin học">Môn Tin học</option>
+                    <option value="Môn Mĩ thuật">Môn Mĩ thuật</option>
+                    <option value="Môn Âm nhạc">Môn Âm nhạc</option>
+                  </select>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Điểm trường *
+                    Trường *
                   </label>
-                  <select
-                    value={quickForm.campus}
-                    onChange={(e) => setQuickForm({ ...quickForm, campus: e.target.value })}
-                    className="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white focus:ring-2 focus:ring-teal-500"
-                  >
-                    <option value="Trường chính">Trường chính</option>
-                    <option value="Kiến Bình">Kiến Bình</option>
-                    <option value="Tân Bình">Tân Bình</option>
-                    <option value="Trương Hoàng">Trương Hoàng</option>
-                    <option value="Đặng Văn Phấn">Đặng Văn Phấn</option>
-                  </select>
+                  <input
+                    type="text"
+                    disabled
+                    value="Trường Tiểu học Mỹ Thạnh"
+                    className="w-full border border-slate-200 rounded-lg p-2 text-xs bg-slate-100 text-slate-700 font-semibold"
+                  />
                 </div>
               </div>
 

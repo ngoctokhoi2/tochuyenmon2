@@ -178,6 +178,16 @@ function smartMergeData(currentData: Record<string, any>, incomingData: Record<s
     });
   }
 
+  // Filter out any mock timetables from old campuses or Grade 5
+  if (Array.isArray(result.timetables)) {
+    result.timetables = result.timetables.filter((t: any) => {
+      if (!t) return false;
+      if (['Kiến Bình', 'Tân Bình', 'Trương Hoàng', 'Đặng Văn Phấn'].includes(t.campus)) return false;
+      if (t.className && (t.className.startsWith('5/') || t.className.startsWith('Lớp 5'))) return false;
+      return true;
+    });
+  }
+
   return result;
 }
 
