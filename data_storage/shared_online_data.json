@@ -1,24 +1,24 @@
 {
   "metadata": {
-    "revision": 1,
-    "lastUpdated": "2026-09-29T02:00:00.000Z",
+    "revision": 3,
+    "lastUpdated": "2026-09-30T08:36:24.618Z",
     "lastUpdatedByEmail": "ngoctokhoi2@gmail.com",
-    "lastUpdatedByName": "Tổ trưởng Nguyễn Kim Ngọc",
+    "lastUpdatedByName": "Nguyễn Thị Kim Ngọc",
     "activeAccounts": [
       {
         "email": "ngoctokhoi2@gmail.com",
-        "name": "Tổ trưởng Nguyễn Kim Ngọc",
-        "lastSeen": "2026-09-29T02:00:00.000Z"
+        "name": "Nguyễn Thị Kim Ngọc",
+        "lastSeen": "2026-09-30T08:34:02.865Z"
       }
     ]
   },
   "data": {
     "settings": {
-      "headerTitle": "UBND Xã Mỹ Lạc – Trường Tiểu Học Mỹ Lạc – Tổ Khối 2",
-      "schoolName": "TRƯỜNG TIỂU HỌC MỸ LẠC",
+      "headerTitle": "UBND Xã Mỹ Thạnh – Trường Tiểu Học Mỹ Thạnh – Tổ Khối 2",
+      "schoolName": "TRƯỜNG TIỂU HỌC MỸ THẠNH",
       "teamName": "TỔ CHUYÊN MÔN KHỐI 2",
       "academicYear": "NĂM HỌC 2026-2027",
-      "communeName": "UBND XÃ MỸ LẠC",
+      "communeName": "UBND XÃ MỸ THẠNH",
       "secretPasswordLeader": "Tt112233"
     },
     "leader_pass": "Tt112233",
@@ -36,7 +36,7 @@
         "yearJoined": 1998,
         "isLeader": false,
         "phone": "0912 345 201",
-        "email": "thihong.thmylac@gmail.com"
+        "email": "thihong.thmythanh@gmail.com"
       },
       {
         "id": "gv-2",
@@ -66,7 +66,7 @@
         "yearJoined": 1996,
         "isLeader": false,
         "phone": "0912 345 203",
-        "email": "hongtham.thmylac@gmail.com"
+        "email": "hongtham.thmythanh@gmail.com"
       },
       {
         "id": "gv-4",
@@ -81,7 +81,7 @@
         "yearJoined": 2018,
         "isLeader": false,
         "phone": "0912 345 204",
-        "email": "phuongtruc.thmylac@gmail.com"
+        "email": "phuongtruc.thmythanh@gmail.com"
       },
       {
         "id": "gv-5",
@@ -96,7 +96,7 @@
         "yearJoined": 2010,
         "isLeader": false,
         "phone": "0912 345 205",
-        "email": "vantoan.thmylac@gmail.com"
+        "email": "vantoan.thmythanh@gmail.com"
       },
       {
         "id": "gv-6",
@@ -111,7 +111,7 @@
         "yearJoined": 2011,
         "isLeader": false,
         "phone": "0912 345 206",
-        "email": "anbinh.thmylac@gmail.com"
+        "email": "anbinh.thmythanh@gmail.com"
       },
       {
         "id": "gv-7",
@@ -126,7 +126,7 @@
         "yearJoined": 1995,
         "isLeader": false,
         "phone": "0912 345 207",
-        "email": "ngocthuy.thmylac@gmail.com"
+        "email": "ngocthuy.thmythanh@gmail.com"
       }
     ],
     "reports": [],

@@ -51,18 +51,18 @@ export function downloadFile(fileName: string, fileDataUrl?: string, fallbackCon
   // Fallback: create dynamic Blob according to file type
   const type = detectFileType(fileName);
   let mimeType = 'text/plain;charset=utf-8';
-  let content = fallbackContent || `TRƯỜNG TIỂU HỌC MỸ LẠC - TỔ KHỐI 2\nTài liệu: ${fileName}\nNgày xuất: ${new Date().toLocaleDateString('vi-VN')}`;
+  let content = fallbackContent || `TRƯỜNG TIỂU HỌC MỸ THẠNH - TỔ KHỐI 2\nTài liệu: ${fileName}\nNgày xuất: ${new Date().toLocaleDateString('vi-VN')}`;
 
   if (type === 'excel') {
     // Generate clean CSV/Excel compatible file
     mimeType = 'application/vnd.ms-excel;charset=utf-8';
     if (!fallbackContent) {
-      content = `\uFEFFTRƯỜNG TIỂU HỌC MỸ LẠC\nTỔ CHUYÊN MÔN KHỐI 2\n\nTên tệp: ${fileName}\nNgày tạo: ${new Date().toLocaleDateString('vi-VN')}\n`;
+      content = `\uFEFFTRƯỜNG TIỂU HỌC MỸ THẠNH\nTỔ CHUYÊN MÔN KHỐI 2\n\nTên tệp: ${fileName}\nNgày tạo: ${new Date().toLocaleDateString('vi-VN')}\n`;
     }
   } else if (type === 'word') {
     mimeType = 'application/msword;charset=utf-8';
     if (!fallbackContent) {
-      content = `TRƯỜNG TIỂU HỌC MỸ LẠC - TỔ KHỐI 2\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nTÀI LIỆU CHUYÊN MÔN KHỐI 2\nTên tài liệu: ${fileName}\n\n${content}`;
+      content = `TRƯỜNG TIỂU HỌC MỸ THẠNH - TỔ KHỐI 2\nCỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\nTÀI LIỆU CHUYÊN MÔN KHỐI 2\nTên tài liệu: ${fileName}\n\n${content}`;
     }
   }
 
@@ -91,7 +91,7 @@ export function exportTimetableToExcelFile(
     const wb = XLSX.utils.book_new();
 
     const data: any[][] = [
-      ['UBND XÃ MỸ LẠC - TRƯỜNG TIỂU HỌC MỸ LẠC'],
+      ['UBND XÃ MỸ THẠNH - TRƯỜNG TIỂU HỌC MỸ THẠNH'],
       ['TỔ CHUYÊN MÔN KHỐI 2 - NĂM HỌC 2026 - 2027'],
       [`THỜI KHÓA BIỂU LỚP: ${className.toUpperCase()}`],
       [`Điểm trường: ${campus}`, `Học kỳ: ${effectiveTerm}`, `GVCN/GV dạy: ${teacherName}`],

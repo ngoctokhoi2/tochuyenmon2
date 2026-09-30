@@ -25,11 +25,14 @@ import {
 import { DeleteConfirmModal } from './DeleteConfirmModal';
 import { FileUploadInput } from './FileUploadInput';
 import { downloadFile, detectFileType } from '../utils/fileHelpers';
+import { isHostServerDevice } from '../utils/onlineSync';
 
 interface ExamAndLessonPlansViewProps {
   items: ExamAndLessonPlan[];
   members: TeacherMember[];
   currentUser: TeacherMember;
+  userEmail?: string;
+  isHostServer?: boolean;
   secretPasswordLeader: string;
   onSaveItem: (item: ExamAndLessonPlan) => void;
   onApproveItem: (id: string, status: 'Đã duyệt' | 'Yêu cầu chỉnh sửa', reviewNote: string) => void;
@@ -60,12 +63,17 @@ export const ExamAndLessonPlansView: React.FC<ExamAndLessonPlansViewProps> = ({
   items,
   members,
   currentUser,
+  userEmail,
+  isHostServer: propIsHostServer,
   secretPasswordLeader,
   onSaveItem,
   onApproveItem,
   onDeleteItem,
   onUpdatePassword
 }) => {
+  const isHost = typeof propIsHostServer === 'boolean'
+    ? propIsHostServer
+    : isHostServerDevice(userEmail);
   const [activeFolder, setActiveFolder] = useState<ExamCategory>('Đề thi GHK I');
   const [isUnlocked, setIsUnlocked] = useState<boolean>(Boolean(currentUser.isLeader));
   const [enteredPassword, setEnteredPassword] = useState<string>('');
@@ -185,7 +193,7 @@ export const ExamAndLessonPlansView: React.FC<ExamAndLessonPlansViewProps> = ({
       return;
     }
 
-    const fallbackContent = `TRƯỜNG TIỂU HỌC MỸ LẠC - TỔ CHUYÊN MÔN KHỐI 2\n` +
+    const fallbackContent = `TRƯỜNG TIỂU HỌC MỸ THẠNH - TỔ CHUYÊN MÔN KHỐI 2\n` +
       `Thư mục: ${item.folderCategory}\n` +
       `Tiêu đề: ${item.title}\n` +
       `Lớp: ${item.className} (${item.campus})\n` +
@@ -535,6 +543,24 @@ export const ExamAndLessonPlansView: React.FC<ExamAndLessonPlansViewProps> = ({
         </div>
       </div>
 
+      {/* Thông báo phân quyền: Máy lẻ chỉ xem và tải xuống, chỉ máy chủ mới được xóa */}
+      {!isHost && (
+        <div className="bg-amber-50 border border-amber-300 text-amber-900 text-xs px-4 py-3 rounded-2xl flex items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <ShieldCheck className="w-5 h-5 text-amber-700 shrink-0" />
+            <div>
+              <p className="font-bold text-amber-950">Chế độ Máy lẻ (Máy chia sẻ):</p>
+              <p className="text-amber-900 mt-0.5">
+                Các máy lẻ chỉ có quyền <strong>Xem nội dung</strong> và <strong>Tải xuống</strong> tài liệu. Nút xóa tài liệu đã được ẩn tự động, chỉ có <strong>Máy chủ (ngoctokhoi2@gmail.com)</strong> mới có quyền xóa.
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] bg-amber-200/90 text-amber-950 font-extrabold px-3 py-1.5 rounded-lg shrink-0 border border-amber-300">
+            🔒 Chỉ xem &amp; Tải xuống
+          </span>
+        </div>
+      )}
+
       {/* Items Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4.5">
         {filteredItems.length === 0 ? (
@@ -578,7 +604,9 @@ export const ExamAndLessonPlansView: React.FC<ExamAndLessonPlansViewProps> = ({
             const isPending = item.status === 'Chờ duyệt';
             const isAuthor = currentUser.id === item.teacherId;
             const canReview = isLeaderAuthorized;
-            const canDelete = isLeaderAuthorized || isAuthor;
+            // STRICT RULE: Only host machine (máy chủ ngoctokhoi2@gmail.com) is allowed to delete!
+            // Client machines (máy lẻ) MUST HIDE the delete button. They can only view and download.
+            const canDelete = isHost;
 
             return (
               <div

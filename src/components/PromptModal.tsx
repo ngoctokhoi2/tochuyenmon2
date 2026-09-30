@@ -13,7 +13,7 @@ export const PromptModal: React.FC<PromptModalProps> = ({ isOpen, onClose }) => 
 
   const promptText = `Bạn hãy đóng vai trò Senior Fullstack Engineer xây dựng ứng dụng web hoàn chỉnh, thẩm mỹ và chuyên nghiệp bằng React + TypeScript + Tailwind CSS dành cho:
 TỰA ĐỀ ỨNG DỤNG:
-"UBND Xã Mỹ Lạc – Trường Tiểu Học Mỹ Lạc – Tổ Khối 2"
+"UBND Xã Mỹ Thạnh – Trường Tiểu Học Mỹ Thạnh – Tổ Khối 2"
 Phương châm chuẩn quốc hiệu:
 CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM — Độc lập - Tự do - Hạnh phúc
 

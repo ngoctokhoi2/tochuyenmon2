@@ -130,7 +130,7 @@ export async function exportAllDataToJson(): Promise<string> {
         cursor.continue();
       } else {
         backup['_backup_date'] = new Date().toISOString();
-        backup['_school'] = 'Trường Tiểu Học Mỹ Lạc - Tổ Khối 2';
+        backup['_school'] = 'Trường Tiểu Học Mỹ Thạnh - Tổ Khối 2';
         resolve(JSON.stringify(backup, null, 2));
       }
     };
@@ -147,7 +147,7 @@ export async function downloadBackupFile(): Promise<void> {
     const a = document.createElement('a');
     a.href = url;
     const dateStr = new Date().toISOString().slice(0, 10);
-    a.download = `SaoLuu_ToKhoi2_MyLac_${dateStr}.json`;
+    a.download = `SaoLuu_ToKhoi2_MyThanh_${dateStr}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

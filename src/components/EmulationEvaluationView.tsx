@@ -130,7 +130,7 @@ export const EmulationEvaluationView: React.FC<EmulationEvaluationViewProps> = (
 
   // Handle Export Excel
   const handleExportExcel = () => {
-    let csv = `\uFEFFTRƯỜNG TIỂU HỌC MỸ LẠC - TỔ CHUYÊN MÔN KHỐI 2\n`;
+    let csv = `\uFEFFTRƯỜNG TIỂU HỌC MỸ THẠNH - TỔ CHUYÊN MÔN KHỐI 2\n`;
     csv += `BẢNG TỔNG HỢP KẾT QUẢ ĐÁNH GIÁ THI ĐUA - ${selectedPeriod.toUpperCase()}\n`;
     csv += `Ngày xuất: ${new Date().toLocaleDateString('vi-VN')} - Người duyệt: Tổ trưởng ${leaderName}\n\n`;
     csv += `STT,Họ và tên giáo viên,Lớp phụ trách,Điểm trường,Giờ dạy thao giảng,Hồ sơ sổ sách,Chất lượng HS,Sáng kiến kinh nghiệm / Đổi mới,Danh hiệu đề xuất,Xếp loại chung,Ghi chú của Tổ trưởng\n`;
@@ -142,7 +142,7 @@ export const EmulationEvaluationView: React.FC<EmulationEvaluationViewProps> = (
 
   // Handle Export Word
   const handleExportWord = () => {
-    let doc = `TRƯỜNG TIỂU HỌC MỸ LẠC - TỔ KHỐI 2\n`;
+    let doc = `TRƯỜNG TIỂU HỌC MỸ THẠNH - TỔ KHỐI 2\n`;
     doc += `CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\n`;
     doc += `BIÊN BẢN HỌP BÌNH XÉT THI ĐUA TỔ VIÊN KHỐI 2\n`;
     doc += `Thời gian: ${new Date().toLocaleDateString('vi-VN')} - Kỳ đánh giá: ${selectedPeriod}\n`;

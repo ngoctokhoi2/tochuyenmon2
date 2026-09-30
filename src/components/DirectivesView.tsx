@@ -66,7 +66,7 @@ export const DirectivesView: React.FC<DirectivesViewProps> = ({
   }>({
     code: '',
     title: '',
-    issuingAuthority: 'Phòng GD&ĐT Mỹ Lạc',
+    issuingAuthority: 'Phòng GD&ĐT Mỹ Thạnh',
     category: 'Công văn chỉ đạo',
     content: '',
     effectiveDate: new Date().toLocaleDateString('vi-VN'),
@@ -117,7 +117,7 @@ export const DirectivesView: React.FC<DirectivesViewProps> = ({
     setFormData({
       code: '',
       title: '',
-      issuingAuthority: 'Phòng GD&ĐT Mỹ Lạc',
+      issuingAuthority: 'Phòng GD&ĐT Mỹ Thạnh',
       category: 'Công văn chỉ đạo',
       content: '',
       effectiveDate: new Date().toLocaleDateString('vi-VN'),

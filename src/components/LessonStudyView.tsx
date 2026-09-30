@@ -411,7 +411,7 @@ export const LessonStudyView: React.FC<LessonStudyViewProps> = ({
                     <button
                       type="button"
                       onClick={() => {
-                        const fallback = `TRƯỜNG TIỂU HỌC MỸ LẠC\nKẾ HOẠCH BÀI DẠY MINH HỌA\nTên bài: ${selectedTopic.topicTitle}\nNgười dạy: ${selectedTopic.teachingTeacherName}\nLớp: ${selectedTopic.teachingClass}\n\n${selectedTopic.rationalePlan}`;
+                        const fallback = `TRƯỜNG TIỂU HỌC MỸ THẠNH\nKẾ HOẠCH BÀI DẠY MINH HỌA\nTên bài: ${selectedTopic.topicTitle}\nNgười dạy: ${selectedTopic.teachingTeacherName}\nLớp: ${selectedTopic.teachingClass}\n\n${selectedTopic.rationalePlan}`;
                         downloadFile(selectedTopic.lessonPlanDocName, selectedTopic.lessonPlanFileDataUrl, fallback);
                       }}
                       className="bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs px-3.5 py-2 rounded-lg shadow-xs flex items-center gap-1.5 shrink-0 ml-2"
@@ -922,7 +922,7 @@ export const LessonStudyView: React.FC<LessonStudyViewProps> = ({
       {selectedTopic && (
         <div className="hidden print:block p-8 bg-white text-black space-y-6 text-sm">
           <div className="text-center space-y-1 border-b pb-4">
-            <p className="font-bold text-xs uppercase">TRƯỜNG TIỂU HỌC MỸ LẠC - TỔ CHUYÊN MÔN KHỐI 2</p>
+            <p className="font-bold text-xs uppercase">TRƯỜNG TIỂU HỌC MỸ THẠNH - TỔ CHUYÊN MÔN KHỐI 2</p>
             <h1 className="font-black text-lg uppercase tracking-wide">
               BIÊN BẢN THẢO LUẬN &amp; GÓP Ý KẾ HOẠCH BÀI DẠY MINH HỌA
             </h1>

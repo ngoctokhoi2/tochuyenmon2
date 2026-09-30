@@ -120,7 +120,7 @@ export const StrugglingStudentsView: React.FC<StrugglingStudentsViewProps> = ({
   const countResolved = students.filter(s => s.progressStatus === 'Đã hoàn thành mục tiêu').length;
 
   const handleExportExcel = () => {
-    let csv = `\uFEFFTRƯỜNG TIỂU HỌC MỸ LẠC - TỔ CHUYÊN MÔN KHỐI 2\n`;
+    let csv = `\uFEFFTRƯỜNG TIỂU HỌC MỸ THẠNH - TỔ CHUYÊN MÔN KHỐI 2\n`;
     csv += `DANH SÁCH THEO DÕI HỌC SINH CHƯA HOÀN THÀNH NHIỆM VỤ HỌC TẬP TỪNG MÔN\n`;
     csv += `Ngày xuất: ${new Date().toLocaleDateString('vi-VN')}\n\n`;
     csv += `STT,Họ và tên học sinh,Lớp,Giáo viên phụ trách,Môn học,Nội dung chưa hoàn thành / Khó khăn,Biện pháp kèm cặp - Phụ đạo,Mức độ hiện tại,Tiến độ / Trạng thái,Ngày đưa vào DS,Ngày hoàn thành\n`;
@@ -131,7 +131,7 @@ export const StrugglingStudentsView: React.FC<StrugglingStudentsViewProps> = ({
   };
 
   const handleExportWord = () => {
-    let doc = `TRƯỜNG TIỂU HỌC MỸ LẠC - TỔ CHUYÊN MÔN KHỐI 2\n`;
+    let doc = `TRƯỜNG TIỂU HỌC MỸ THẠNH - TỔ CHUYÊN MÔN KHỐI 2\n`;
     doc += `CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\n`;
     doc += `SỔ THEO DÕI VÀ KẾ HOẠCH PHỤ ĐẠO HỌC SINH CHƯA ĐẠT CHUẨN KIẾN THỨC KĨ NĂNG\n`;
     doc += `Thời gian xuất báo cáo: ${new Date().toLocaleDateString('vi-VN')}\n\n`;

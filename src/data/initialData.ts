@@ -17,7 +17,7 @@ import {
   ClassTimetable 
 } from '../types';
 
-// Danh sách Giáo viên Khối 2 - Trường Tiểu Học Mỹ Lạc (Năm học 2026-2027)
+// Danh sách Giáo viên Khối 2 - Trường Tiểu Học Mỹ Thạnh (Năm học 2026-2027)
 // Căn cứ danh sách phân công chuyên môn chính thức
 export const INITIAL_MEMBERS: TeacherMember[] = [
   {
@@ -33,7 +33,7 @@ export const INITIAL_MEMBERS: TeacherMember[] = [
     yearJoined: 1998,
     isLeader: false,
     phone: '0912 345 201',
-    email: 'thihong.thmylac@gmail.com'
+    email: 'thihong.thmythanh@gmail.com'
   },
   {
     id: 'gv-2',
@@ -63,7 +63,7 @@ export const INITIAL_MEMBERS: TeacherMember[] = [
     yearJoined: 1996,
     isLeader: false,
     phone: '0912 345 203',
-    email: 'hongtham.thmylac@gmail.com'
+    email: 'hongtham.thmythanh@gmail.com'
   },
   {
     id: 'gv-4',
@@ -78,7 +78,7 @@ export const INITIAL_MEMBERS: TeacherMember[] = [
     yearJoined: 2018,
     isLeader: false,
     phone: '0912 345 204',
-    email: 'phuongtruc.thmylac@gmail.com'
+    email: 'phuongtruc.thmythanh@gmail.com'
   },
   {
     id: 'gv-5',
@@ -93,7 +93,7 @@ export const INITIAL_MEMBERS: TeacherMember[] = [
     yearJoined: 2010,
     isLeader: false,
     phone: '0912 345 205',
-    email: 'vantoan.thmylac@gmail.com'
+    email: 'vantoan.thmythanh@gmail.com'
   },
   {
     id: 'gv-6',
@@ -108,7 +108,7 @@ export const INITIAL_MEMBERS: TeacherMember[] = [
     yearJoined: 2011,
     isLeader: false,
     phone: '0912 345 206',
-    email: 'anbinh.thmylac@gmail.com'
+    email: 'anbinh.thmythanh@gmail.com'
   },
   {
     id: 'gv-7',
@@ -123,7 +123,7 @@ export const INITIAL_MEMBERS: TeacherMember[] = [
     yearJoined: 1995,
     isLeader: false,
     phone: '0912 345 207',
-    email: 'ngocthuy.thmylac@gmail.com'
+    email: 'ngocthuy.thmythanh@gmail.com'
   }
 ];
 
@@ -184,10 +184,10 @@ export const STANDARD_TIMETABLE_GRID: Record<string, string> = {
 };
 
 export const INITIAL_APP_SETTINGS = {
-  headerTitle: 'UBND Xã Mỹ Lạc – Trường Tiểu Học Mỹ Lạc – Tổ Khối 2',
-  schoolName: 'TRƯỜNG TIỂU HỌC MỸ LẠC',
+  headerTitle: 'UBND Xã Mỹ Thạnh – Trường Tiểu Học Mỹ Thạnh – Tổ Khối 2',
+  schoolName: 'TRƯỜNG TIỂU HỌC MỸ THẠNH',
   teamName: 'TỔ CHUYÊN MÔN KHỐI 2',
   academicYear: 'NĂM HỌC 2026-2027',
-  communeName: 'UBND XÃ MỸ LẠC',
+  communeName: 'UBND XÃ MỸ THẠNH',
   secretPasswordLeader: 'Tt112233'
 };

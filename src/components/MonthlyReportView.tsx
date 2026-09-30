@@ -12,16 +12,24 @@ import {
   Trash2, 
   Edit3,
   ChevronRight, 
-  AlertCircle 
+  AlertCircle,
+  ShieldCheck,
+  Server,
+  Globe,
+  Cloud
 } from 'lucide-react';
 import { DeleteConfirmModal } from './DeleteConfirmModal';
 import { FileUploadInput } from './FileUploadInput';
 import { downloadFile, detectFileType } from '../utils/fileHelpers';
+import { isHostServerDevice } from '../utils/onlineSync';
 
 interface MonthlyReportViewProps {
   reports: MonthlyReport[];
   members: TeacherMember[];
   currentUser: TeacherMember;
+  userEmail?: string;
+  isOnline?: boolean;
+  isHostServer?: boolean;
   onSaveReport: (report: MonthlyReport) => void;
   onDeleteReport: (reportId: string) => void;
 }
@@ -35,9 +43,15 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
   reports,
   members,
   currentUser,
+  userEmail,
+  isOnline = true,
+  isHostServer: propIsHostServer,
   onSaveReport,
   onDeleteReport
 }) => {
+  const isHostServer = typeof propIsHostServer === 'boolean'
+    ? propIsHostServer
+    : isHostServerDevice(userEmail);
   const leaderName = members.find(m => m.isLeader)?.name || 'Nguyễn Kim Ngọc';
   const [selectedMonth, setSelectedMonth] = useState<string>('Tháng 9');
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -143,7 +157,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
   };
 
   const handleExportExcel = () => {
-    let csv = `\uFEFFTRƯỜNG TIỂU HỌC MỸ LẠC - TỔ CHUYÊN MÔN KHỐI 2\n`;
+    let csv = `\uFEFFTRƯỜNG TIỂU HỌC MỸ THẠNH - TỔ CHUYÊN MÔN KHỐI 2\n`;
     csv += `BÁO CÁO THỐNG KÊ SĨ SỐ HỌC SINH - ${selectedMonth.toUpperCase()}\n`;
     csv += `Tổ trưởng Chuyên môn Khối 2: ${leaderName}\n`;
     csv += `Ngày xuất dữ liệu: ${new Date().toLocaleDateString('vi-VN')}\n\n`;
@@ -159,7 +173,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
   };
 
   const handleExportWord = () => {
-    let doc = `TRƯỜNG TIỂU HỌC MỸ LẠC - TỔ KHỐI 2\n`;
+    let doc = `TRƯỜNG TIỂU HỌC MỸ THẠNH - TỔ KHỐI 2\n`;
     doc += `CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM\nĐộc lập - Tự do - Hạnh phúc\n\n`;
     doc += `BÁO CÁO TỔNG HỢP SĨ SỐ VÀ TÌNH HÌNH HỌC SINH ${selectedMonth.toUpperCase()}\n`;
     doc += `Tổ trưởng Chuyên môn Khối 2: ${leaderName}\n`;
@@ -238,6 +252,56 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Khung Thông Tin Đồng Bộ Trực Tuyến & Máy Chủ ngoctokhoi2@gmail.com */}
+      <div className="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white p-4 sm:p-5 rounded-2xl shadow-sm border border-blue-500/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1.5">
+          <div className="flex items-center flex-wrap gap-2">
+            <span className="bg-emerald-500 text-white font-extrabold text-[11px] px-2.5 py-0.5 rounded-full flex items-center gap-1.5 shadow-xs uppercase tracking-wider">
+              <span className="w-2 h-2 rounded-full bg-white animate-ping"></span>
+              Chế độ Online: Đang hoạt động
+            </span>
+            {isHostServer ? (
+              <span className="bg-amber-400 text-amber-950 font-black text-[11px] px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-xs">
+                🖥️ MÁY CHỦ QUẢN TRỊ (ngoctokhoi2@gmail.com)
+              </span>
+            ) : (
+              <span className="bg-sky-400/20 text-sky-200 border border-sky-400/50 font-bold text-[11px] px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-xs">
+                💻 MÁY CHIA SẺ (Máy lẻ GV) • Máy chủ nhận: ngoctokhoi2@gmail.com
+              </span>
+            )}
+          </div>
+          <p className="text-sm font-semibold text-blue-100 flex items-center flex-wrap gap-2">
+            <span>Máy chủ tiếp nhận báo cáo sĩ số:</span>
+            <strong className="text-yellow-300 font-mono text-sm underline">ngoctokhoi2@gmail.com</strong>
+            <span className="text-slate-300 text-xs">({leaderName} - Tổ trưởng Chuyên môn Khối 2)</span>
+          </p>
+          <p className="text-xs text-blue-200/80">
+            {isHostServer ? (
+              'Bạn đang ở chế độ Máy chủ. Toàn bộ báo cáo từ các máy lẻ giáo viên gửi lên sẽ được cập nhật tức thì tại đây để thẩm định và phê duyệt.'
+            ) : (
+              'Báo cáo sĩ số nộp tại máy lẻ này được đồng bộ tức thì về Máy chủ ngoctokhoi2@gmail.com của Tổ trưởng Cô Nguyễn Thị Kim Ngọc.'
+            )}
+          </p>
+        </div>
+
+        <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/15 text-xs shrink-0 space-y-1">
+          <div className="text-slate-200 flex items-center justify-between gap-3">
+            <span>Tổ trưởng duyệt báo cáo:</span>
+            <strong className="text-white">{leaderName}</strong>
+          </div>
+          <div className="text-slate-200 flex items-center justify-between gap-3">
+            <span>Email Máy chủ:</span>
+            <strong className="text-yellow-300 font-mono">ngoctokhoi2@gmail.com</strong>
+          </div>
+          <div className="text-slate-200 flex items-center justify-between gap-3">
+            <span>Vai trò máy hiện tại:</span>
+            <strong className={isHostServer ? "text-amber-300" : "text-emerald-300"}>
+              {isHostServer ? "🖥️ Máy chủ Quản trị" : "💻 Máy chia sẻ (Máy lẻ)"}
+            </strong>
+          </div>
+        </div>
+      </div>
+
       {/* Top Action & Month Selector Bar */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl shadow-xs border border-slate-200">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -501,7 +565,9 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
                             {rep.status}
                           </span>
                           <span className="text-[10px] text-slate-500 font-medium whitespace-nowrap">
-                            {rep.reviewedBy || (rep.status === 'Đã duyệt' ? `Tổ trưởng ${leaderName}` : '')}
+                            {rep.status === 'Đã duyệt'
+                              ? `✓ Máy chủ đã duyệt (${rep.reviewedBy || 'Tổ trưởng ' + leaderName})`
+                              : `⏳ Chờ Máy chủ (ngoctokhoi2@gmail.com) duyệt`}
                           </span>
                           {currentUser.isLeader && rep.status !== 'Đã duyệt' && (
                             <button
@@ -867,14 +933,14 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
       <div className="hidden print:block p-8 bg-white text-black space-y-6 text-sm">
         <div className="flex justify-between items-start border-b pb-4">
           <div className="text-center space-y-0.5">
-            <p className="text-xs uppercase font-semibold">UBND XÃ MỸ LẠC</p>
-            <p className="font-bold text-xs uppercase">TRƯỜNG TIỂU HỌC MỸ LẠC</p>
+            <p className="text-xs uppercase font-semibold">UBND XÃ MỸ THẠNH</p>
+            <p className="font-bold text-xs uppercase">TRƯỜNG TIỂU HỌC MỸ THẠNH</p>
             <p className="text-xs font-bold text-blue-900">TỔ CHUYÊN MÔN KHỐI 2</p>
           </div>
           <div className="text-center space-y-0.5">
             <p className="font-bold text-xs uppercase">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
             <p className="text-xs italic underline">Độc lập - Tự do - Hạnh phúc</p>
-            <p className="text-[11px] italic mt-1">Mỹ Lạc, ngày {new Date().getDate()} tháng {new Date().getMonth() + 1} năm {new Date().getFullYear()}</p>
+            <p className="text-[11px] italic mt-1">Mỹ Thạnh, ngày {new Date().getDate()} tháng {new Date().getMonth() + 1} năm {new Date().getFullYear()}</p>
           </div>
         </div>
 

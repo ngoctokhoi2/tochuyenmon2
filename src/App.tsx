@@ -50,7 +50,8 @@ import {
   checkServerSyncStatus,
   subscribeToOnlineUpdates,
   sendBeaconSync,
-  getLastKnownRevision
+  getLastKnownRevision,
+  setDeviceMode
 } from './utils/onlineSync';
 
 import { testFirestoreConnection } from './firebase/config';
@@ -880,7 +881,7 @@ export default function App() {
 
   const handleDeleteDocument = (id: string) => {
     if (!isHostServerDevice(userEmail)) {
-      alert('Chỉ máy chủ Tài khoản ngoctokhoi2@gmail.com mới có quyền xóa Kế hoạch Tổ và Phân phối chương trình (PPCT)! Các máy chia sẻ không có chức năng xóa.');
+      alert('Chỉ máy chủ Tài khoản ngoctokhoi2@gmail.com mới có quyền xóa Kế hoạch Tổ và Phân phối chương trình (PPCT)! Các máy chia sẻ / máy lẻ chỉ có quyền xem và tải xuống.');
       return;
     }
     setTeamDocuments(prev => prev.filter(d => d.id !== id));
@@ -921,6 +922,10 @@ export default function App() {
   };
 
   const handleDeleteExamItem = (id: string) => {
+    if (!isHostServerDevice(userEmail)) {
+      alert('Chỉ máy chủ Tài khoản ngoctokhoi2@gmail.com mới có quyền xóa KHDH và Đề thi! Các máy chia sẻ / máy lẻ chỉ có quyền xem và tải xuống.');
+      return;
+    }
     setExamsAndPlans(prev => prev.filter(item => item.id !== id));
     deleteExamFromFirestore(id, userEmail, currentUser.name).catch(e => console.warn('Firestore exam delete error:', e));
     deleteDataFromOnlineServer('exams', id, userEmail, currentUser.name).catch(() => {});
@@ -1140,7 +1145,7 @@ export default function App() {
       console.warn('Failed to reset shared server storage', e);
     }
 
-    alert('Đã thiết lập lại trạng thái ban đầu của ứng dụng (Cô Nguyễn Thị Kim Ngọc - Tổ trưởng Chuyên môn Khối 2 - Trường Tiểu Học Mỹ Lạc)!');
+    alert('Đã thiết lập lại trạng thái ban đầu của ứng dụng (Cô Nguyễn Thị Kim Ngọc - Tổ trưởng Chuyên môn Khối 2 - Trường Tiểu Học Mỹ Thạnh)!');
   };
 
   const totalDocumentsCount = 
@@ -1177,7 +1182,18 @@ export default function App() {
         settings={settings}
         currentUser={currentUser}
         members={members}
-        onSelectUser={setCurrentUser}
+        onSelectUser={(selectedUser) => {
+          setCurrentUser(selectedUser);
+          if (selectedUser.email) {
+            setUserEmail(selectedUser.email);
+            setActiveUserEmail(selectedUser.email);
+            if (selectedUser.email !== 'ngoctokhoi2@gmail.com' && !selectedUser.isLeader) {
+              setDeviceMode('shared');
+            } else if (selectedUser.email === 'ngoctokhoi2@gmail.com') {
+              setDeviceMode('host');
+            }
+          }
+        }}
         onOpenSettings={() => setShowSettingsModal(true)}
         onOpenPromptModal={() => setShowPromptModal(true)}
         onResetData={handleResetToDefault}
@@ -1296,6 +1312,9 @@ export default function App() {
             reports={reports}
             members={members}
             currentUser={currentUser}
+            userEmail={userEmail}
+            isOnline={isOnline}
+            isHostServer={isHostServerDevice(userEmail)}
             onSaveReport={handleSaveReport}
             onDeleteReport={handleDeleteReport}
           />
@@ -1328,6 +1347,8 @@ export default function App() {
             items={examsAndPlans}
             members={members}
             currentUser={currentUser}
+            userEmail={userEmail}
+            isHostServer={isHostServerDevice(userEmail)}
             secretPasswordLeader={secretPasswordLeader}
             onSaveItem={handleSaveExamItem}
             onApproveItem={handleApproveExamItem}

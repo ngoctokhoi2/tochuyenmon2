@@ -378,7 +378,7 @@ export const ClassTimetableView: React.FC<ClassTimetableViewProps> = ({
       {currentTimetable && (
         <div className="hidden print:block p-8 bg-white text-black space-y-4">
           <div className="text-center space-y-1 border-b pb-4">
-            <p className="font-bold text-xs uppercase">UBND XÃ MỸ LẠC - TRƯỜNG TIỂU HỌC MỸ LẠC</p>
+            <p className="font-bold text-xs uppercase">UBND XÃ MỸ THẠNH - TRƯỜNG TIỂU HỌC MỸ THẠNH</p>
             <p className="font-bold text-xs uppercase">TỔ CHUYÊN MÔN KHỐI 2</p>
             <h1 className="font-black text-xl uppercase tracking-wide pt-2">
               THỜI KHÓA BIỂU LỚP {currentTimetable.className.toUpperCase()}

@@ -323,7 +323,17 @@ export function subscribeToOnlineUpdates(
       };
 
       eventSource.onerror = () => {
-        onStatusChanged(false, 0);
+        // Do not immediately drop to offline if the HTTP REST server is reachable
+        checkServerSyncStatus().then(status => {
+          if (status.success) {
+            onStatusChanged(true, status.activeConnectedPeers || 1);
+          } else {
+            onStatusChanged(false, 0);
+          }
+        }).catch(() => {
+          onStatusChanged(false, 0);
+        });
+
         if (eventSource) {
           eventSource.close();
           eventSource = null;

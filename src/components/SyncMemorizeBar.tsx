@@ -21,7 +21,7 @@ import {
   Home
 } from 'lucide-react';
 import { TeacherMember } from '../types';
-import { isHostServerDevice } from '../utils/onlineSync';
+import { isHostServerDevice, setDeviceMode } from '../utils/onlineSync';
 
 interface SyncMemorizeBarProps {
   currentUser: TeacherMember;
@@ -124,15 +124,41 @@ export const SyncMemorizeBar: React.FC<SyncMemorizeBarProps> = ({
                 </span>
               </button>
 
-              {/* Machine Role Badge */}
+              {/* Machine Role Badge & Switcher */}
               {isHostServerDevice(userEmail) ? (
-                <span className="text-[11px] bg-amber-400/20 text-amber-300 font-extrabold px-2.5 py-1 rounded-md border border-amber-400/40 flex items-center gap-1 shadow-xs" title="Máy chủ ngoctokhoi2@gmail.com: Có toàn quyền quản trị và xóa tài liệu">
-                  🖥️ Máy chủ (ngoctokhoi2@gmail.com)
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[11px] bg-amber-400/20 text-amber-300 font-extrabold px-2.5 py-1 rounded-md border border-amber-400/40 flex items-center gap-1 shadow-xs" title="Máy chủ ngoctokhoi2@gmail.com: Có toàn quyền quản trị và xóa tài liệu">
+                    🖥️ Máy chủ (ngoctokhoi2@gmail.com)
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDeviceMode('shared');
+                      onChangeUserEmail('giaovien.chiase@gmail.com');
+                    }}
+                    className="text-[10px] bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white px-2 py-0.5 rounded border border-slate-600 transition-colors"
+                    title="Bấm để mô phỏng / hoạt động ở chế độ Máy lẻ (Máy chia sẻ)"
+                  >
+                    Đổi sang Máy lẻ
+                  </button>
+                </div>
               ) : (
-                <span className="text-[11px] bg-sky-900/60 text-sky-200 font-semibold px-2.5 py-1 rounded-md border border-sky-400/40 flex items-center gap-1 shadow-xs" title="Máy chia sẻ: Chỉ có quyền xem & tải về, không có chức năng xóa">
-                  💻 Máy chia sẻ (Chỉ xem &amp; Tải về)
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[11px] bg-sky-900/60 text-sky-200 font-semibold px-2.5 py-1 rounded-md border border-sky-400/40 flex items-center gap-1 shadow-xs" title="Máy chia sẻ: Chỉ có quyền xem & tải về, không có chức năng xóa. Báo cáo nộp về Máy chủ ngoctokhoi2@gmail.com">
+                    💻 Máy chia sẻ • Kết nối Máy chủ: <strong className="text-yellow-300 ml-1">ngoctokhoi2@gmail.com</strong>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDeviceMode('host');
+                      onChangeUserEmail('ngoctokhoi2@gmail.com');
+                    }}
+                    className="text-[10px] bg-amber-500/20 hover:bg-amber-500/40 text-amber-200 hover:text-amber-100 px-2 py-0.5 rounded border border-amber-400/50 transition-colors font-bold"
+                    title="Bấm để chuyển về quyền Máy chủ ngoctokhoi2@gmail.com"
+                  >
+                    Đổi sang Máy chủ
+                  </button>
+                </div>
               )}
             </div>
 

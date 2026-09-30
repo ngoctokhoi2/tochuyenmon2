@@ -433,7 +433,7 @@ export const MemberManagementModal: React.FC<MemberManagementModalProps> = ({
                   className="w-full border border-slate-300 rounded-lg p-2 text-sm font-bold text-red-900 outline-none focus:ring-2 focus:ring-red-500"
                 />
                 <span className="text-[11px] text-slate-400">
-                  Mặc định theo yêu cầu: UBND Xã Mỹ Lạc – Trường Tiểu Học Mỹ Lạc – Tổ Khối 2
+                  Mặc định theo yêu cầu: UBND Xã Mỹ Thạnh – Trường Tiểu Học Mỹ Thạnh – Tổ Khối 2
                 </span>
               </div>
 

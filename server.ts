@@ -84,9 +84,18 @@ function ensureStoreDefaults(store: SharedStore): SharedStore {
     store.data = initial.data;
   } else {
     for (const [key, val] of Object.entries(initial.data)) {
-      if (store.data[key] === undefined) {
+      if (store.data[key] === undefined || (Array.isArray(store.data[key]) && store.data[key].length === 0 && Array.isArray(val) && val.length > 0)) {
         store.data[key] = val;
       }
+    }
+    // Always sync school name and header title to latest setting
+    if (store.data.settings) {
+      store.data.settings = {
+        ...store.data.settings,
+        headerTitle: INITIAL_APP_SETTINGS.headerTitle,
+        schoolName: INITIAL_APP_SETTINGS.schoolName,
+        communeName: INITIAL_APP_SETTINGS.communeName
+      };
     }
   }
   return store;
@@ -143,6 +152,9 @@ function smartMergeData(currentData: Record<string, any>, incomingData: Record<s
           }
         });
         result[key] = Array.from(itemMap.values());
+      } else if (val.length === 0 && existingArray.length > 0) {
+        // Do not overwrite existing non-empty array with an empty array payload
+        result[key] = existingArray;
       } else {
         result[key] = val;
       }
@@ -375,12 +387,12 @@ async function startServer() {
       }
 
       // Protected collections: Only host server account ngoctokhoi2@gmail.com has permission to delete
-      const protectedCollections = ['directives', 'meetings', 'emulations', 'emulation_docs', 'team_docs'];
+      const protectedCollections = ['directives', 'meetings', 'emulations', 'emulation_docs', 'team_docs', 'exams'];
       const isHostServerUser = (userEmail || '').toLowerCase().trim() === 'ngoctokhoi2@gmail.com';
       if (protectedCollections.includes(colName) && !isHostServerUser) {
         res.status(403).json({
           success: false,
-          error: 'Chỉ máy chủ Tài khoản ngoctokhoi2@gmail.com mới có quyền xóa Kế hoạch Tổ, PPCT, công văn, thông báo họp và xét thi đua! Các máy chia sẻ không có chức năng xóa.'
+          error: 'Chỉ máy chủ Tài khoản ngoctokhoi2@gmail.com mới có quyền xóa Kế hoạch Tổ, PPCT, KHDH và Đề thi! Các máy chia sẻ / máy lẻ chỉ có quyền xem và tải xuống.'
         });
         return;
       }

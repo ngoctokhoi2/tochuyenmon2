@@ -83,7 +83,7 @@ export const TeamDocumentsView: React.FC<TeamDocumentsViewProps> = ({
   });
 
   const handleDownload = (doc: TeamPlanDocument) => {
-    const fallbackText = `TRƯỜNG TIỂU HỌC MỸ LẠC - TỔ CHUYÊN MÔN KHỐI 2\n` +
+    const fallbackText = `TRƯỜNG TIỂU HỌC MỸ THẠNH - TỔ CHUYÊN MÔN KHỐI 2\n` +
       `Tài liệu: ${doc.title}\n` +
       `Danh mục: ${doc.category}\n` +
       `Người đăng: ${doc.uploadedBy}\n` +
@@ -164,11 +164,18 @@ export const TeamDocumentsView: React.FC<TeamDocumentsViewProps> = ({
 
         {/* Thông báo quyền quản trị cho máy chia sẻ */}
         {!isHostServer && (
-          <div className="mt-3 bg-amber-50 border border-amber-300 text-amber-900 text-xs px-3.5 py-2.5 rounded-xl flex items-center gap-2.5 shadow-xs">
-            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
-            <span>
-              <strong>Chế độ máy chia sẻ:</strong> Bạn có quyền xem và tải về Kế hoạch Tổ &amp; Phân phối chương trình (PPCT). 
-              Các máy chia sẻ <strong>không có chức năng xóa tài liệu</strong>, chỉ có nút tải xuống. Chỉ có máy chủ Tài khoản <strong>ngoctokhoi2@gmail.com</strong> mới xóa được.
+          <div className="mt-3 bg-amber-50 border border-amber-300 text-amber-900 text-xs px-4 py-3 rounded-2xl flex items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center gap-2.5">
+              <ShieldCheck className="w-5 h-5 text-amber-700 shrink-0" />
+              <div>
+                <p className="font-bold text-amber-950">Chế độ Máy lẻ (Máy chia sẻ):</p>
+                <p className="text-amber-900 mt-0.5">
+                  Các máy lẻ chỉ có quyền <strong>Xem tài liệu</strong> và <strong>Tải về máy</strong>. Nút xóa tài liệu đã được ẩn tự động, chỉ có <strong>Máy chủ (ngoctokhoi2@gmail.com)</strong> mới được phép xóa.
+                </p>
+              </div>
+            </div>
+            <span className="text-[11px] bg-amber-200/90 text-amber-950 font-extrabold px-3 py-1.5 rounded-lg shrink-0 border border-amber-300">
+              🔒 Chỉ xem &amp; Tải xuống
             </span>
           </div>
         )}
@@ -494,7 +501,7 @@ export const TeamDocumentsView: React.FC<TeamDocumentsViewProps> = ({
                 <div>Tệp đính kèm: <strong>{viewingDoc.fileName}</strong> ({viewingDoc.fileSize})</div>
                 <div className="mt-1 text-emerald-700 font-sans font-semibold flex items-center gap-1">
                   <CheckCircle2 className="w-4 h-4" />
-                  Đã được kiểm duyệt và lưu trữ trên hệ thống trường Tiểu Học Mỹ Lạc.
+                  Đã được kiểm duyệt và lưu trữ trên hệ thống trường Tiểu Học Mỹ Thạnh.
                 </div>
               </div>
             </div>
